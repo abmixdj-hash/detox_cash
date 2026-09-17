@@ -1,5 +1,6 @@
 import express from 'express';
 import axios from 'axios';
+
 const app = express();
 app.use(express.json());
 
@@ -7,12 +8,14 @@ const PORT = process.env.PORT || 8080;
 
 app.post('/v1/chat/completions', async (req, res) => {
     try {
-        const apiKey = req.headers['authorization']?.replace('Bearer ', '');
-        
+        // Берем секретный ключ из переменных окружения Railway
+        const apiKey = process.env.OPENAI_API_KEY;
+
         if (!apiKey) {
-            return res.status(401).json({ error: 'API key is missing' });
+            return res.status(500).json({ error: 'OpenAI API key is not configured on server' });
         }
 
+        // Пересылаем запрос в OpenAI, используя скрытый на сервере ключ
         const response = await axios.post('https://api.openai.com/v1/chat/completions', req.body, {
             headers: {
                 'Authorization': `Bearer ${apiKey}`,
