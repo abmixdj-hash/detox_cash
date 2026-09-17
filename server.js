@@ -1,6 +1,5 @@
-const express = require('express');
-const axios = require('axios');
-const app = express();
+import express from 'express';
+import axios from 'axios';
 
 app.use(express.json());
 
